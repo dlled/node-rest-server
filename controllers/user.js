@@ -12,7 +12,7 @@ const userGet = async(req = request, res = response) => {
         .skip(Number(offSet))
         .limit(Number(limit)),
         User.countDocuments({estado: true})
-    ]).catch()
+    ])
     
 
     res.json({
