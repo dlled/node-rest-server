@@ -13,6 +13,7 @@ const userGet = async(req = request, res = response) => {
         .limit(Number(limit)),
         User.countDocuments({estado: true})
     ])
+    
 
     res.json({
         usuarios,
@@ -46,7 +47,7 @@ const userPut = async(req = request, res = response) => {
 
     const {id} = req.params;
     const {_id, password, google, ...data} = req.query;
-    
+
     if (password) {
         //Encrypt
         const salt = bcrypt.genSaltSync();
