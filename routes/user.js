@@ -27,6 +27,10 @@ router.post('/', [
     validarCampos
 ], userPost);
 
-router.delete('/', userDelete);
+router.delete('/:id',[
+    check('id', 'No es un id válido').isMongoId(),
+    check('id').custom(userByIdValidator),
+    validarCampos
+], userDelete);
 
 module.exports = router;
