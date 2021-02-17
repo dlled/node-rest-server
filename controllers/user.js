@@ -24,7 +24,7 @@ const userGet = async(req = request, res = response) => {
 const userPost = async(req = request, res = response) => {
 
     const {nombre, correo, password , rol } = req.query; 
-    const user = new User({nombre, correo, password, rol});
+    const user =  new User({nombre, correo, password, rol});
     //Verificar si existe el correo (EXPRESS-VALIDATOR)
     
     // Encriptar la contraseña (BCRYPTJS)
