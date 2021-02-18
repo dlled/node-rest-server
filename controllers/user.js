@@ -67,14 +67,17 @@ const userDelete = async(req = request, res = response) => {
 
     const {id} = req.params;
     
+    const uid = req.uid;
     // Fisicamente borrado NO RECOMENDABLE
     //const user = await User.findByIdAndDelete(id);
 
     // Borrado lógico, poniendo el flag de estado a false
     const user = await User.findByIdAndUpdate(id, {estado: false})
-
+    const userAuth = req.userAuth
 
     res.json({
+        userAuth,
+        uid,
         user,
         ok: true,
         msg: 'User turned down by id'

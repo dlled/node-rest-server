@@ -10,6 +10,7 @@ class Server {
         this.app = express();
         this.port = process.env.PORT;
         this.userPaths = '/api/usuarios';
+        this.authPath = '/api/auth';
 
         // Conexión a la bbdd
         this.database();
@@ -26,7 +27,8 @@ class Server {
     }
 
     routes(){
-       this.app.use( this.userPaths, require('../routes/user'));
+        this.app.use( this.authPath, require('../routes/auth'));
+        this.app.use( this.userPaths, require('../routes/user'));
     }
 
     middlewares(){
