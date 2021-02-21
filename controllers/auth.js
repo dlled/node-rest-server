@@ -7,7 +7,6 @@ const { makeJWT } = require("../helpers/jwt-generator");
 const authLogin = async(req = request, res = response) => {
 
     const {correo, password} = req.query;
-
     try {
 
         //Verificar si el email existe
@@ -43,22 +42,28 @@ const authLogin = async(req = request, res = response) => {
             user,
             msg: 'Login OK'
         })
-
         
     } catch (error) {
 
         console.log(error);
-
         return res.status(500).json({
             msg: "Hable con el administrador" 
         })
         
     }
+}
 
- 
+const googleSignin = (req = request, res = response) => {
+
+    const {id_token} = req.query;
+
+    res.json({
+        msg: 'Google Sign In success'
+    })
 
 }
 
 module.exports = {
-    authLogin
+    authLogin,
+    googleSignin
 }
