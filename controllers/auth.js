@@ -74,7 +74,7 @@ const googleSignin = async(req = request, res = response) => {
                 google: true
             };
 
-            usuario = new User(data);
+            usuario = await new User(data);
             await usuario.save();
         }
 
@@ -90,12 +90,8 @@ const googleSignin = async(req = request, res = response) => {
 
         res.json({
             usuario,
-            token
-        })
-
-        res.json({
+            token,
             msg: 'Google Sign In success',
-            
         })
     } catch (error) {
         res.status(400).json({
