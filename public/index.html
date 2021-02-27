@@ -21,6 +21,11 @@
     <a href="#" onclick="signOut();">Sign out</a>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script>
+
+        var url = ( window.location.hostname.includes('localhost'))
+                    ? 'http://localhost:8080/api/auth/google'
+                    : 'https://rest-server-dlled.herokuapp.com/api/auth/google'
+
         function onSignIn(googleUser) {
             var profile = googleUser.getBasicProfile();
             console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
@@ -30,7 +35,16 @@
             
             var id_token = googleUser.getAuthResponse().id_token;
 
-            console.log(id_token);
+            const data = {id_token};
+
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json'},
+                body: JSON.stringify( data )
+            })
+            .then( resp => resp.json() )
+            .then( data => console.log('Server: ', data))
+            .catch( console.log );
         }
         function signOut() {
             var auth2 = gapi.auth2.getAuthInstance();
