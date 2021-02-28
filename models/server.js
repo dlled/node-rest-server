@@ -6,11 +6,15 @@ const { dbConnection } = require('../database/config');
 
 class Server {
 
-    constructor(){
+    constructor() {
         this.app = express();
         this.port = process.env.PORT;
-        this.userPaths = '/api/usuarios';
-        this.authPath = '/api/auth';
+
+        this.paths = {
+            user: '/api/usuarios',
+            auth: '/api/auth',
+            categorias: '/api/categorias'
+        }
 
         // Conexión a la bbdd
         this.database();
@@ -26,26 +30,27 @@ class Server {
         await dbConnection();
     }
 
-    routes(){
-        this.app.use( this.authPath, require('../routes/auth'));
-        this.app.use( this.userPaths, require('../routes/user'));
+    routes() {
+        this.app.use(this.paths.auth, require('../routes/auth'));
+        this.app.use(this.paths.user, require('../routes/user'));
+        this.app.use(this.paths.categorias, require('../routes/categorias'));
     }
 
-    middlewares(){
+    middlewares() {
 
         //CORS
-        this.app.use( cors() );
+        this.app.use(cors());
 
         // Parseo y lectura del body de las requests
-        this.app.use( express.json() );
+        this.app.use(express.json());
 
-        this.app.use( express.static('public') );
+        this.app.use(express.static('public'));
 
     }
 
-    listen(){
+    listen() {
 
-        this.app.listen(this.port, ()=> {
+        this.app.listen(this.port, () => {
             console.log('Servidor corriendo en puerto', this.port);
         })
     }

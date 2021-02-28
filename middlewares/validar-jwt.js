@@ -13,18 +13,14 @@ const validarJWT = async(req = request, res = response, next) => {
         })
     }
 
-    console.log(token);
+   // console.log(token);
 
     try {
         const {uid} = jwt.verify( token, process.env.PRIVATE_KEY);
 
         req.uid = uid;
-
-        console.log(uid)
         
         const userAuth = await User.findById(uid);
-
-        console.log(userAuth)
 
         if (!userAuth) {
             return res.status(401).json({

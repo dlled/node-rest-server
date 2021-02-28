@@ -1,5 +1,5 @@
-const Role = require("../models/role");
-const User = require("../models/user");
+
+const {Categoria, User, Role} = require('../models');
 
 const roleValidator = async(rol = '') => {
     const exists = await Role.findOne({rol});
@@ -26,8 +26,18 @@ const userByIdValidator = async( id ) => {
     }
 }
 
+const categoriaByIdValidator = async( id ) => {
+    
+    const exists = await Categoria.findById(id);
+
+    if(!exists) {
+        throw new Error(`La categoria con id: ${id}, no existe en la bbdd`);
+    }
+}
+
 module.exports = {
     roleValidator,
     emailValidator,
-    userByIdValidator
+    userByIdValidator,
+    categoriaByIdValidator
 }
