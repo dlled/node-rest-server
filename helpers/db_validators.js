@@ -1,5 +1,5 @@
 
-const {Categoria, User, Role} = require('../models');
+const {Categoria, User, Role, Producto} = require('../models');
 
 const roleValidator = async(rol = '') => {
     const exists = await Role.findOne({rol});
@@ -35,9 +35,43 @@ const categoriaByIdValidator = async( id ) => {
     }
 }
 
+const categoriaValidator = async(nombre = "") => {
+    nombre = nombre.toUpperCase();
+
+    const exists = Categoria.findOne({nombre});
+
+    if( !exists ){
+        throw new Error(`La categoría ${nombre} no existe en la bbdd`);
+    }
+}
+
+const productoByIdValidator = async( id ) => {
+    
+    const exists = await Producto.findById(id);
+
+    if(!exists) {
+        throw new Error(`La categoria con id: ${id}, no existe en la bbdd`);
+    }
+}
+
+const productoValidator = async(nombre = "") => {
+    nombre = nombre.toUpperCase();
+
+    const exists = await Producto.findOne({nombre});
+
+    console.log(exists)
+
+    if( exists ){
+        throw new Error(`El producto ${nombre} ya existe en la bbdd`);
+    }
+}
+
 module.exports = {
     roleValidator,
     emailValidator,
     userByIdValidator,
-    categoriaByIdValidator
+    categoriaByIdValidator,
+    categoriaValidator,
+    productoByIdValidator,
+    productoValidator
 }

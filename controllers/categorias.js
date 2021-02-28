@@ -44,6 +44,8 @@ const categoriaUpdate = async(req = request, res = response) => {
 
     data.nombre = data.nombre.toUpperCase();
 
+    data.usuario = req.userAuth._id
+
     const cat = await Categoria.findByIdAndUpdate(id, data);
 
     res.json({
