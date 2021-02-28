@@ -14,7 +14,8 @@ class Server {
             user: '/api/usuarios',
             auth: '/api/auth',
             productos: '/api/productos',
-            categorias: '/api/categorias'
+            categorias: '/api/categorias',
+            search: '/api/search'
         }
 
         // Conexión a la bbdd
@@ -36,6 +37,7 @@ class Server {
         this.app.use(this.paths.user, require('../routes/user'));
         this.app.use(this.paths.categorias, require('../routes/categorias'));
         this.app.use(this.paths.productos, require('../routes/productos'));
+        this.app.use(this.paths.search, require('../routes/search'));
     }
 
     middlewares() {
