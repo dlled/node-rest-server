@@ -33,6 +33,8 @@ router.post('/',[
    validarJWT,
    check('nombre', 'El nombre es obligatorio').notEmpty(),
    check('nombre', 'El tipo de producto debe de ser único').custom(productoValidator),
+   check('categoria', 'La categoría de producto es obligatorio').notEmpty(),
+   check('categoria', 'No es un id de mongo valido').isMongoId(),
    check('categoria', 'Tiene que existir esa categoria').custom(categoriaByIdValidator),
    //validarCampos
  ], crearProducto)
@@ -44,6 +46,7 @@ router.put('/:id', [
   check('id', 'El id no está asociado a nungún producto de la bd').custom(productoByIdValidator),
   check('nombre', 'El nombre es obligatorio').notEmpty(),
   check('nombre', 'El tipo de producto debe de ser único').custom(productoValidator),
+  check('categoria', 'La categoría de producto es obligatorio').notEmpty(),
   check('categoria', 'No es un id de mongo valido').isMongoId(),
   check('categoria', 'Tiene que existir esa categoria').custom(categoriaByIdValidator),
   validarCampos

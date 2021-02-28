@@ -11,7 +11,8 @@ const getProductos = async(req = request, res = response) => {
         Producto.find( { estado: true } )
         .skip(Number(offSet))
         .limit(Number(limit))
-        .populate('usuario','nombre'),
+        .populate('usuario','nombre')
+        .populate('categoria', 'nombre'),
         Producto.countDocuments({estado: true})
     ])
     
@@ -27,7 +28,10 @@ const productoPorId = async(req = request, res = response) => {
 
     const {id} = req.params;
 
-    const product = await Producto.findById(id);
+    const product = await Producto
+                    .findById(id)
+                    .populate('usuario','nombre')
+                    .populate('categoria', 'nombre');
 
     res.json({
         product,
@@ -46,7 +50,10 @@ const productoUpdate = async(req = request, res = response) => {
 
     data.usuario = req.userAuth._id
 
-    const product = await Producto.findByIdAndUpdate(id, data, {new: true});
+    const product = await Producto
+                    .findByIdAndUpdate(id, data, {new: true})
+                    .populate('usuario','nombre')
+                    .populate('categoria', 'nombre');
 
     res.json({
         product,
@@ -64,8 +71,10 @@ const productoDelete = async(req = request, res = response) => {
     //const user = await User.findByIdAndDelete(id);
 
     // Borrado lógico, poniendo el flag de estado a false
-    const product = await Producto.findByIdAndUpdate(id, {estado: false})
-    
+    const product = await Producto
+                    .findByIdAndUpdate(id, {estado: false}, {new: true})
+                    .populate('usuario','nombre')
+                    .populate('categoria', 'nombre');
 
     res.json({
         product,
