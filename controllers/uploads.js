@@ -4,6 +4,8 @@ const { User, Producto } = require('../models')
 const path = require('path');
 const fs = require('fs');
 
+const cloudinary = require('cloudinary').v2;
+cloudinary.config( process.env.CLOUDINARY_URL );
 
 const loadFile = async (req = request, res = response) => {
 
@@ -74,6 +76,63 @@ const updateFile = async (req = request, res = response) => {
         })
     }
 }
+const updateFileCloud = async (req = request, res = response) => {
+
+    const { coleccion, id } = req.params;
+
+    let modelo;
+
+    switch (coleccion) {
+        case 'users':
+            modelo = await User.findById(id);
+            if (!modelo) {
+                return res.status(400).json({
+                    msg: `No existe un user con id: ${id}`
+                });
+            }
+            break;
+        case 'productos':
+            modelo = await Producto.findById(id);
+            if (!modelo) {
+                return res.status(400).json({
+                    msg: `No existe un producto con id: ${id}`
+                });
+            }
+            break;
+
+        default:
+            return res.status(500).json({ msg: 'Hable con el administrador ' });
+            break;
+    }
+
+    if( modelo.img ) {
+        // // Hay que borrar la imagen del servidor
+        // const imgPath = path.join( __dirname, '../uploads', coleccion, modelo.img);
+
+        // if(fs.existsSync( imgPath )) {
+        //     fs.unlinkSync( imgPath );
+        // }
+
+        // Ejemplo para Cloudinary
+        const nombre = modelo.img.split('/').pop();
+        const [public_id] = nombre.split('.');
+
+        await cloudinary.uploader.destroy( public_id );
+
+    }
+
+    const { tempFilePath } = req.files.myFile
+    const { secure_url } = await cloudinary.uploader.upload( tempFilePath );
+
+    modelo.img = secure_url;
+
+    await modelo.save();
+
+    res.json({
+        modelo
+    })
+
+}
 
 const getFile = async(req, res  = response ) => {
 
@@ -122,5 +181,6 @@ const getFile = async(req, res  = response ) => {
 module.exports = {
     loadFile,
     updateFile,
-    getFile
+    getFile,
+    updateFileCloud
 }
