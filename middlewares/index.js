@@ -4,8 +4,8 @@ const {adminValidator, hasRol} = require('./validar-rol');
 const validarCampos = require('./validator');
 
 module.exports = {
-    validarJWT,
-    adminValidator,
-    hasRol,
-    validarCampos
+    ...validarJWT,
+    ...adminValidator,
+    ...hasRol,
+    ...validarCampos
 }

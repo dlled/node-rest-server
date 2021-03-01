@@ -59,11 +59,21 @@ const productoValidator = async(nombre = "") => {
 
     const exists = await Producto.findOne({nombre});
 
-    console.log(exists)
-
     if( exists ){
         throw new Error(`El producto ${nombre} ya existe en la bbdd`);
     }
+}
+
+const existeColeccion = (coleccion, permitidas = []) => {
+
+    const permitted = permitidas.includes(coleccion);
+
+    if ( !permitted ){
+        throw new Error(`La coleccion ${coleccion}, no es accesible o no existe`);
+    }
+
+    return true;
+
 }
 
 module.exports = {
@@ -73,5 +83,6 @@ module.exports = {
     categoriaByIdValidator,
     categoriaValidator,
     productoByIdValidator,
-    productoValidator
+    productoValidator,
+    existeColeccion
 }

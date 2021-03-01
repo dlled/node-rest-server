@@ -14,8 +14,6 @@ const buscarUsuarios = async (termino = '', res = response) => {
 
     const esMongoID = ObjectId.isValid(termino);
 
-    console.log(esMongoID)
-
     if (esMongoID) {
         const user = await User.findById(termino);
 
