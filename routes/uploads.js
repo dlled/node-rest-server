@@ -1,6 +1,6 @@
 const {Router} = require('express');
 const { check } = require('express-validator');
-const { loadFile, updateFileCloud } = require('../controllers/uploads');
+const { loadFile, updateFileCloud, getFileCloud } = require('../controllers/uploads');
 const { validarCampos } = require('../middlewares/validator');
 const { updateFile, getFile } = require('../controllers/uploads');
 const { existeColeccion } = require('../helpers');
@@ -21,6 +21,6 @@ router.get('/:coleccion/:id', [
     check('id', 'Debe ser un id de MongoDB').isMongoId(),
     check('coleccion').custom( c => existeColeccion(c, ['users', 'productos', 'categorias'])),
     validarCampos
-], getFile )
+], getFileCloud )
 
 module.exports = router;

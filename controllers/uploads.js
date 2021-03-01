@@ -118,7 +118,6 @@ const updateFileCloud = async (req = request, res = response) => {
         const [public_id] = nombre.split('.');
 
         await cloudinary.uploader.destroy( public_id );
-
     }
 
     const { tempFilePath } = req.files.myFile
@@ -177,10 +176,51 @@ const getFile = async(req, res  = response ) => {
 
     
 } 
+const getFileCloud = async(req, res  = response ) => {
+
+    const {id, coleccion} = req.params;
+
+    let modelo;
+
+    switch (coleccion) {
+        case 'users':
+            modelo = await User.findById(id);
+            if (!modelo) {
+                return res.status(400).json({
+                    msg: `No existe un user con id: ${id}`
+                });
+            }
+            break;
+        case 'productos':
+            modelo = await Producto.findById(id);
+            if (!modelo) {
+                return res.status(400).json({
+                    msg: `No existe un producto con id: ${id}`
+                });
+            }
+            break;
+
+        default:
+            return res.status(500).json({ msg: 'Hable con el administrador ' });
+            break;
+    }
+
+    if( modelo.img ) {
+
+        res.send( modelo.img )
+        // Hay que borrar la imagen del servidor
+    } else {
+        const placeholderPath = path.join( __dirname, '../uploads', 'placeholder.jpg');
+        res.sendFile( placeholderPath );
+    }
+
+    
+} 
 
 module.exports = {
     loadFile,
     updateFile,
     getFile,
-    updateFileCloud
+    updateFileCloud,
+    getFileCloud
 }
